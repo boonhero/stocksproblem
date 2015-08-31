@@ -3,11 +3,20 @@ package model
 import java.util.Date
 
 import com.mongodb.casbah.MongoClient
+import com.mongodb.casbah.commons.{Imports, MongoDBObject}
+import com.mongodb.casbah.Imports._
+import org.bson.types.ObjectId
 import play.api.Logger
 
-object MongoManager {
-  val mongoConnection = MongoClient("128.199.158.79", 27017)
+object MongoCli {
+  val logger: Logger = Logger(this.getClass())
+
+  val mongoClient = MongoClient("localhost", 27017)
+  val db = mongoClient("stockproblems")
+  val messageColl = db("message")
+  println("MongoCli init")
 }
+
 object Messages {
   val messages: List[Message] = List()
 }
@@ -22,9 +31,11 @@ object StockTransactions {
 
 case class Stock (name: String, price: Int, dateOrdered: java.util.Date)
 case class StockTransaction(stock: Stock, transactionDate: java.util.Date, userId: String)
-
-case class Message(var id: String, message: String)
-
+case class Message(_id: String, message: String) {
+  def asMongoDbObject(): MongoDBObject = {
+    MongoDBObject("message" -> message)
+  }
+}
 
 /**
  * Helper for pagination
@@ -37,15 +48,17 @@ case class Page[A](items: Seq[A], page: Int, offset: Long, total: Long) {
 object Message {
   val logger: Logger = Logger(this.getClass())
 
-  def insert(message: Message) = Option[String] {
-    val uuid: String = java.util.UUID.randomUUID.toString
-    message.id = uuid
-    Messages.messages :+ message
-    logger.info(s"Messages.messages.size: ${Messages.messages.size}")
-    uuid
+  def all(): List[Message] = {
+    MongoCli.messageColl.find(MongoDBObject.empty).toList.map(f =>
+      Message(f.getAs[ObjectId]("_id").getOrElse(new ObjectId()).toString, f.getAs[String]("message").get))
   }
 
-  def findAll(): List[Message] = Messages.messages
+  def create(message: Message): ObjectId = {
+    var doc = new MongoDBObject(message.asMongoDbObject())
+    MongoCli.messageColl.insert(doc)
+    doc.as[ObjectId]("_id")
+  }
+
 }
 
 object StockManager {

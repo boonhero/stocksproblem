@@ -21,7 +21,7 @@ var MessageList = React.createClass({
     componentDidMount: function() {
         console.log("MessageList.componentDidMount()");
         this.loadMessages();
-        setInterval(this.loadMessages, this.props.pollInterval);
+        //setInterval(this.loadMessages, this.props.pollInterval);
     },
     render: function() {
         return (

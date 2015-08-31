@@ -1,6 +1,6 @@
 package controllers
 
-import model.{StockManager, Stock, Message}
+import model.{Message, Stock, StockManager}
 import play.api._
 import play.api.data.Form
 import play.api.data.Forms._
@@ -34,7 +34,7 @@ class Application extends Controller {
    */
   def messageList = Action { implicit request =>
     logger.info("message list")
-    val json: JsValue = Json.toJson(Message.findAll())
+    val json: JsValue = Json.toJson(Message.all())
     logger.info(s"json result:  [${json}]")
     Ok(json)
   }
@@ -47,8 +47,7 @@ class Application extends Controller {
     messageForm.bindFromRequest.fold(
       formWithErrors => BadRequest(""),
       message => {
-        val msgId: Option[String] = Message.insert(message)
-        logger.info(s"new message added: ${msgId.getOrElse("Not found")}")
+        Message.create(message)
         Ok("")
       })
   }

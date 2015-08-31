@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   "org.webjars"       %  "flat-ui"            % "bcaf2de95e",
   "org.webjars" 		%  "react" 				% "0.13.3",
   "org.webjars" 		%  "marked" 			% "0.3.2",
-  "org.mongodb" %% "casbah" % "2.8.2"
+  "org.mongodb" %% "casbah" % "2.8.2",
+  "com.novus" % "salat_2.11" % "1.9.9"
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
