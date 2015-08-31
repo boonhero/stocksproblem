@@ -89,7 +89,7 @@ var StockList = React.createClass({
     componentDidMount: function() {
         console.log("StockList.componentDidMount()");
         this.loadStocks();
-        //setInterval(this.loadStocks, this.props.pollInterval);
+        setInterval(this.loadStocks, this.props.pollInterval);
     },
     render: function() {
         return (
@@ -138,4 +138,4 @@ var Stock = React.createClass({
 });
 
 React.render(<StockForm url="/stock" />, document.getElementById('buyStocks'));
-React.render(<StockList url="/stock" />, document.getElementById('showUserStocks'));
+React.render(<StockList url="/stock" pollInterval={2000} />, document.getElementById('showUserStocks'));
