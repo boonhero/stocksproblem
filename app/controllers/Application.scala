@@ -1,6 +1,6 @@
 package controllers
 
-import model.{Message, Stock, StockManager}
+import model.{Message, Stock}
 import play.api._
 import play.api.data.Form
 import play.api.data.Forms._
@@ -50,24 +50,6 @@ class Application extends Controller {
         Message.create(message)
         Ok("")
       })
-  }
-
-  /**
-   * Handle Stock submission form
-   */
-  def saveStock = Action(BodyParsers.parse.json) { implicit request =>
-    logger.info("saveStock")
-    val b = request.body.validate[Stock]
-    b.fold(
-      errors => {
-        BadRequest("")
-      },
-      stock => {
-        StockManager.appendStock(stock, "test")
-        logger.info(s"new stock added: ${stock.name}")
-        Ok("")
-      }
-    )
   }
 
 }
