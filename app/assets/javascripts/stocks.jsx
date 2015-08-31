@@ -99,7 +99,7 @@ var StockList = React.createClass({
 
                 <div className="row">
                     <div className="col-xs-3">
-                        <input type="number" name="price" ref="price" required="required" placeholder="Sell Price"
+                        <input type="number" name="sell_price" ref="sell_price" required="required" placeholder="Sell Price"
                                className="form-control"/>
                     </div>
                     <div className="col-xs-3">

@@ -28,7 +28,7 @@ class StockController extends Controller {
         "name" -> nonEmptyText
       )(Stock.apply)(Stock.unapply),
       "price" -> number,
-      "orderedDate" -> date,
+      "orderedDate" -> date(pattern="MM/dd/YYYY"),
       "transactionType" -> default(text, "BUY": String),
       "transactionDate" -> default(date, new Date(): Date),
       "userId" -> nonEmptyText
@@ -39,9 +39,9 @@ class StockController extends Controller {
    * Handle Buy stocks form
    */
   def buyTransaction = Action { implicit request =>
-    logger.info("buyTransaction")
+    logger.info(s"test buyTransaction -> ${buyStockForm.toString}")
     buyStockForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(""),
+      formWithErrors => BadRequest(formWithErrors.errors.toString),
       stockTransaction => {
         logger.info(s"stocktransaction: ${stockTransaction.toString}")
         Stock.findByName(stockTransaction.stock.name) match {
