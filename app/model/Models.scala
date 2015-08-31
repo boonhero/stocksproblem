@@ -2,6 +2,7 @@ package model
 
 import java.util.Date
 
+import com.mongodb.casbah
 import com.mongodb.casbah.MongoClient
 import com.mongodb.casbah.commons.{Imports, MongoDBObject}
 import com.mongodb.casbah.Imports._
@@ -104,7 +105,7 @@ object StockTransaction {
   def findUser(userId: String): List[StockTransaction] = {
     MongoCli.stockTransactionColl.find(MongoDBObject("userId" -> userId)).toList match {
       case Nil => List()
-      case mongoObjects => mongoObjects map {each => mongoDbToObject(each)}
+      case mongoObjects => logger.info(s" mongoObjects.size: ${ mongoObjects.size}"); mongoObjects map {each => mongoDbToObject(each)}
     }
   }
 
@@ -114,5 +115,17 @@ object StockTransaction {
     doc.as[ObjectId]("_id")
   }
 
-  def mongoDbToObject(f: MongoDBObject): StockTransaction = ???
+  def mongoDbToObject(f: MongoDBObject): StockTransaction = {
+    logger.info(s"mongoDbToObject : ${f.toString()}")
+    var list: casbah.Imports.BasicDBList = f.getAs[BasicDBList]("stock").get
+    StockTransaction(
+      f.getAs[ObjectId]("objectId").getOrElse(new ObjectId()).toString,
+      Stock(list(0).toString, list(1).toString),
+      f.getAs[Int]("price").get,
+      f.getAs[Date]("dateOrdered").get,
+      f.getAs[String]("transactionType").get,
+      f.getAs[Date]("transactionDate").get,
+      f.getAs[String]("userId").get
+    )
+  }
 }

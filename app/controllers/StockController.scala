@@ -60,4 +60,12 @@ class StockController extends Controller {
       })
   }
 
+  def showStocksFrom(userId: String) = Action { implicit request =>
+    logger.info(s"user stocks list: ${userId}")
+    val stocks: List[Stock] = StockTransaction.findUser(userId).map(stockTransaction => stockTransaction.stock)
+    val json: JsValue = Json.toJson(stocks)
+    logger.info(s"json result:  [${json}]")
+    Ok(json)
+  }
+
 }
