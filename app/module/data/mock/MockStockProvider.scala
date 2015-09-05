@@ -1,11 +1,13 @@
 package module.data.mock
 
+import java.io.File
 import java.util.UUID
 
 import com.google.inject.{Inject, Singleton}
 import model.{Currency, Stock}
 import module.data.StockDao
 import org.joda.time.DateTime
+import play.api.Play
 import utility.DateHelper
 
 import scala.io.BufferedSource
@@ -14,7 +16,7 @@ import scala.io.BufferedSource
 class MockStockProvider @Inject() (stockDao: StockDao) {
 
   def readStocks(): Unit = {
-    val source: BufferedSource = scala.io.Source.fromURL(getClass.getResource("stocks.txt"))
+    val source: BufferedSource = scala.io.Source.fromFile(new File(Play.current.configuration.getString("my.stocks.location").get))
     val lines: String = source.mkString
 
     val perLine: Array[String] = lines.split("\n")
