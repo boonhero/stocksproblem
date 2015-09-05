@@ -1,17 +1,9 @@
 package scala.module.service
 
-import module.data.mock.{MockStockDao, MockStockTransactionDao, MockUserDao}
-import module.service.ServiceModule
 import org.specs2.matcher.Matchers
 import org.specs2.mutable.Specification
 
 class UserServiceSpec extends Specification with Matchers {
-
-  val module = new ServiceModule {
-    override lazy val userDao = new MockUserDao
-    override lazy val stockTransactionDao = new MockStockTransactionDao
-    override lazy val stockDao = new MockStockDao
-  }
 
 //  behavior of "UserService"
 //

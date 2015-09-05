@@ -1,7 +1,6 @@
 package scala.module.service
 
-import module.data.mock.{MockStockProvider, MockStockDao, MockStockTransactionDao, MockUserDao}
-import module.service.ServiceModule
+import module.data.mock.{MockStockProvider, MockStockDao}
 import org.specs2.mock.Mockito
 import org.specs2.mutable.Specification
 
