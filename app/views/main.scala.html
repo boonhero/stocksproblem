@@ -5,15 +5,16 @@
 <html lang="en">
     <head>
         <title>@title</title>
-        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
-        <link    rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'/s>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")"/>
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")"/>
 
             <!-- Loading Bootstrap -->
-        <link href="@routes.Assets.versioned("lib/bootstrap/css/bootstrap.min.css")" rel="stylesheet">
-        <link href="@routes.WebJarAssets.at(WebJarAssets.locate("jquery-ui.css"))" rel="stylesheet">
+        <link href="@routes.Assets.versioned("lib/bootstrap/css/bootstrap.min.css")" rel="stylesheet"/>
+        <link href="@routes.Assets.versioned("css/main.css")" rel="stylesheet">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"/>
             <!-- Loading Flat UI -->
-        <link href="@routes.Assets.versioned("lib/flat-ui/css/flat-ui.css")" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.2.2/css/flat-ui.min.css" rel="stylesheet"/>
 
             <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
             <!--[if lt IE 9]>
@@ -22,20 +23,20 @@
 	    <![endif]-->
     </head>
     <body>
+        <div style="background: #3D8EB9;"><a style="color: white; margin: 10px;" href="/">Buy stocks</a><a style="color: white; margin: 10px;" href="/view/dashboard">Sell stocks</a></div>
         <div class="container">
             @content
         </div>
     </body>
 
     <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.js"))'></script>
-    <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery-ui.js"))'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
-    <script type='text/javascript' src='@routes.Assets.versioned("javascripts/flat-ui.min.js")'></script>
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.2.2/js/flat-ui.min.js'></script>
     <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.fullPath("react", "react.js"))'></script>
     <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("JSXTransformer.js"))'></script>
     <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("marked.js"))'></script>
-
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/reactable/0.10.2/reactable.min.js'></script>
 
     <script type='text/jsx' src='@routes.Assets.versioned("javascripts/app.jsx")'></script>
-    <script type='text/jsx' src='@routes.Assets.versioned("javascripts/stocks.jsx")'></script>
 </html>
