@@ -66,15 +66,15 @@ var StockForm = React.createClass({
     }
 });
 
-var StockList = React.createClass({
+var UserStockList = React.createClass({
     loadStocks: function() {
-        console.log("StockList.loadStocks()");
+        console.log("UserStockList.loadStocks()");
         $.ajax({
             url: "/stock/user/testId",
             dataType: 'json',
             cache: false,
             success: function(data) {
-                console.log("StockList.dataSet size:" + data.length);
+                console.log("UserStockList.dataSet size:" + data.length);
                 this.setState({data: data});
             }.bind(this),
             error: function(xhr, status, err) {
@@ -83,11 +83,11 @@ var StockList = React.createClass({
         });
     },
     getInitialState: function() {
-        console.log("StockList.getInitialState()");
+        console.log("UserStockList.getInitialState()");
         return {data: []};
     },
     componentDidMount: function() {
-        console.log("StockList.componentDidMount()");
+        console.log("UserStockList.componentDidMount()");
         this.loadStocks();
         setInterval(this.loadStocks, this.props.pollInterval);
     },
@@ -111,31 +111,62 @@ var StockList = React.createClass({
     }
 });
 
-var Stocks = React.createClass({
-    render: function() {
-        var stockNodes = this.props.data.map(function (stock) {
-            return (
-                <Stock key={stock.id} name={stock.name} />
-            );
+var StockList = React.createClass({
+    loadStocks: function() {
+        console.log("StockList.loadStocks()");
+        $.ajax({
+            url: "/stock",
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                console.log("StockList.dataSet size:" + data.length);
+                this.setState({data: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
         });
-
+    },
+    getInitialState: function() {
+        console.log("StockList.getInitialState()");
+        return {data: []};
+    },
+    componentDidMount: function() {
+        console.log("StockList.componentDidMount()");
+        this.loadStocks();
+        //setInterval(this.loadStocks, this.props.pollInterval);
+    },
+    render: function() {
         return (
-            <div className="well">
-                {stockNodes}
+            <div className="">
+                <h1>Stock list</h1>
+                 <Stocks data={this.state.data}/>
             </div>
         );
     }
 });
 
-var Stock = React.createClass({
+var Stocks = React.createClass({
     render: function() {
+        var stockNodes = this.props.data.map(function (stock) {
+            var stockTradeDate = $.datepicker.formatDate("dd-M-yy", new Date(stock.tradeDate));
+            return (
+                <Reactable.Tr>
+                    <Reactable.Td column="Trade Date" data={stockTradeDate} />
+                    <Reactable.Td column="Name" data={stock.name}/>
+                    <Reactable.Td column="Price" data={stock.currency.name + ' ' + stock.price}/>
+                    <Reactable.Td column="Rate" data={stock.currency.rate}/>
+                    <Reactable.Td column=""><a href={'/view/stock/buy/' + stock._id}>BUY</a></Reactable.Td>
+                </Reactable.Tr>
+            );
+        });
+
         return (
-            <blockquote>
-                <span>{this.props.name}</span><input type="radio" name="sell" class="custom-radio"></input>
-            </blockquote>
+            <Reactable.Table className="table" itemsPerPage={10} sortable={true} filterable={['Name', 'Trade Date']}>
+                {stockNodes}
+            </Reactable.Table>
         );
     }
 });
 
-React.render(<StockForm url="/stock" />, document.getElementById('buyStocks'));
-React.render(<StockList url="/stock" pollInterval={2000} />, document.getElementById('showUserStocks'));
+React.render(<StockList url="/stock" />, document.getElementById('listStocks'));

@@ -1,0 +1,8 @@
+@(stockId: String)
+
+@main("Stocks") {
+    <input type="hidden" id="stockId" value=@stockId />
+    <div id="buyStock"></div>
+
+    <script type='text/jsx' src='@routes.Assets.versioned("javascripts/buy_stock.jsx")'></script>
+}
