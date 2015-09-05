@@ -1,7 +1,7 @@
 package controllers
 
 import com.google.inject.Inject
-import model.{ComputeResult, Currency, Stock, User}
+import model._
 import module.data.mock.MockStockProvider
 import module.data.{StockDao, StockTransactionDao, UserDao}
 import module.service.StockTransactionService
@@ -19,6 +19,7 @@ class StockController @Inject() (stockTransactionService: StockTransactionServic
   implicit val currencyFormat = Json.format[Currency]
   implicit val stockFormat = Json.format[Stock]
   implicit val computeResultFormat = Json.format[ComputeResult]
+  implicit val stockTransactionFormat = Json.format[StockTransaction]
 
   def index = Action {
     mockStockProvider.readStocks()
@@ -77,6 +78,21 @@ class StockController @Inject() (stockTransactionService: StockTransactionServic
     Redirect(routes.StockController.myDashboardIndex)
   }
 
+  def sell(id:String, rate:Double) = Action {implicit request =>
+    stockDao.findBy(id) match {
+      case Some(stock) => {
+        val currency: Currency = Currency(stock.name, rate)
+        val user: User = userDao.find("testId").get
+        val newStock = user.getStock(id).get.copy(currency = currency)
+        user.removeStock(id)
+        stockTransactionService.transact(newStock, "SELL", user.name)
+      }
+      case None => BadRequest("not a valid request")
+    }
+
+    Redirect(routes.StockController.myDashboardIndex)
+  }
+
   def showStocksFrom(userId: String) = Action { implicit request =>
     logger.info(s"user stocks list: ${userId}")
     val stocks: List[Stock] = userDao.find(userId) match {
@@ -103,5 +119,15 @@ class StockController @Inject() (stockTransactionService: StockTransactionServic
     Ok(json)
   }
 
+  def resetTransactions = Action { implicit request =>
+    stockTransactionDao.removeAll()
+    Redirect(routes.StockController.myDashboardIndex)
+  }
+
+  def listStockTransactions = Action { implicit request =>
+    val json: JsValue = Json.toJson( stockTransactionDao.findAll().get)
+    logger.info(s"json result:  [${json}]")
+    Ok(json)
+  }
 
 }

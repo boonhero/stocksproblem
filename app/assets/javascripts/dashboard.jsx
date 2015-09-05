@@ -32,7 +32,7 @@ var UserStockList = React.createClass({
 var StockStatus = React.createClass({
     loadComputeResult: function() {
         $.ajax({
-            url: "/transaction",
+            url: "/transaction/status",
             dataType: 'json',
             cache: false,
             success: function(data) {
@@ -55,6 +55,7 @@ var StockStatus = React.createClass({
             <div className="stock-status">
                 <h3>Stock Status</h3>
                 <ComputeResult data={this.state.data} />
+                <a href="/reset">Reset transactions</a>
             </div>
         );
     }
@@ -113,6 +114,7 @@ var Currencies = React.createClass({
             <div className="">
                 <h3>Currency Rate</h3>
                 <Currency data={this.state.data} />
+                <a href="/view/dashboard">Generate new rates</a>
             </div>
         );
     }
@@ -124,7 +126,7 @@ var Currency = React.createClass({
             return (
                 <Reactable.Tr>
                     <Reactable.Td column="Name" data={currency.name} />
-                    <Reactable.Td  column="Rate" id={currency.name} data={currency.rate}/>
+                    <Reactable.Td  column="Rate" className={currency.name} data={currency.rate}/>
                 </Reactable.Tr>
             );
         });
@@ -140,6 +142,7 @@ var Stocks = React.createClass({
     render: function() {
         var stockNodes = this.props.data.map(function (stock) {
             var stockTradeDate = $.datepicker.formatDate("dd-M-yy", new Date(stock.tradeDate));
+            var rate = $('.' + stock.currency.name).text()
             return (
                 <Reactable.Tr>
                     <Reactable.Td column="Trade Date" data={stockTradeDate} />
@@ -147,7 +150,7 @@ var Stocks = React.createClass({
                     <Reactable.Td column="Quantity" data={stock.quantity}/>
                     <Reactable.Td column="Currency" data={stock.currency.name}/>
                     <Reactable.Td column="Price" data={stock.price}/>
-                    <Reactable.Td column=""><a href={'/view/stock/sell/' + stock._id}>SELL</a></Reactable.Td>
+                    <Reactable.Td column=""><a href={'/view/stock/'+stock._id+'/sell/' + rate }>SELL</a></Reactable.Td>
                 </Reactable.Tr>
             );
         });
