@@ -133,7 +133,7 @@ var DateStockList = React.createClass({
                 <h3>Stocks today! {this.state.date}</h3>
                 <TodayStocks data={this.state.data} />
                 <form>
-                    <input type="date" id="datetimepicker1" placeholder="Choose date" required="true" value={this.state.date} />
+                    <input type="text" id="datetimepicker1" placeholder="Choose date" required="true" value={this.state.date} />
                     <br/><input id="loadStockButton" type="button" value="Load" /><span> Used also in selling stocks.</span>
                 </form>
             </div>
