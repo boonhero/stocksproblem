@@ -39,9 +39,9 @@ class UserService @Inject() (userDao: UserDao, stockTransactionService: StockTra
                                 quantityUsed = userStock.quantity
                             }
                             user.removeStock(userStockId)
-                            val lossFor: BigDecimal = (tradeStock.price * quantityUsed) - (userStock.price * quantityUsed)
+                            val lossFor: BigDecimal = (tradeStock.price * quantityUsed * tradeStock.currency.rate) - (userStock.price * quantityUsed * userStock.currency.rate)
                             user.addStock(userStock.copy(quantity = (userStock.quantity - quantityUsed), profitLoss = lossFor))
-                            val newStock =  tradeStock.copy(userStockId = userStockId, quantity = quantityUsed)
+                            val newStock =  tradeStock.copy(userStockId = userStockId, quantity = quantityUsed, profitLoss = lossFor)
                             Some(stockTransactionService.transact(newStock, "SELL", user.name))
                         }
                         case None => None

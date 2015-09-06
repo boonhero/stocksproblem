@@ -48,7 +48,7 @@ class StockTransactionService @Inject() (stockTransactionDao: StockTransactionDa
   def getProfitOrLossForAllStocks(): List[ComputeResult] = {
     findAll() match {
       case Some(all) => {
-        all.map(p => (p.stock.name, convert(p.transactionType, (p.usdPrice * p.stock.quantity * p.stock.currency.rate))))
+        all.map(p => (p.stock.name, p.stock.profitLoss))
           .groupBy(_._1).map(kv => ComputeResult(kv._1, kv._2.map(_._2).sum)).toList
       }
       case None => List()

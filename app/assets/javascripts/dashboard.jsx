@@ -244,7 +244,7 @@ var Stocks = React.createClass({
                     <Reactable.Td column="Name" data={stock.name}/>
                     <Reactable.Td column="Quantity" data={stock.quantity}/>
                     <Reactable.Td column="Base Price" data={stock.currency.name + ' ' + stock.price}/>
-                    <Reactable.Td column="Profit/Loss" data={stock.profitLoss}/>
+                    <Reactable.Td column="Profit/Loss ($)" data={stock.profitLoss}/>
                     <Reactable.Td column="Sell Qty"><input type="number" id={stock.userStockId} /></Reactable.Td>
                     <Reactable.Td column=""><a href={'/sell/stock/' + stock.userStockId + '/sell/' +  $("#datetimepicker1").val() + '/quantity/' + (($("#" + stock.userStockId).val() == "") ? 0 : $("#" + stock.userStockId).val()) }>SELL</a></Reactable.Td>
                 </Reactable.Tr>
