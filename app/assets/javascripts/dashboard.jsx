@@ -69,7 +69,7 @@ var ComputeResult = React.createClass({
                 redgreenHighlight = "red";
             } else {
                 redgreenHighlight = "green";
-            }
+        }
             return (
                 <Reactable.Tr>
                     <Reactable.Td column="Name" data={computeResult.name} />

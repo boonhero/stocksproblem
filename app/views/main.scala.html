@@ -23,7 +23,7 @@
 	    <![endif]-->
     </head>
     <body>
-        <div style="background: #3D8EB9;"><a style="color: white; margin: 10px;" href="/">Buy stocks</a><a style="color: white; margin: 10px;" href="/view/dashboard">Sell stocks</a></div>
+        <div style="background: #3D8EB9;"><a id="buyNav" style="color: white; margin: 10px; padding:5px;" href="/">Buy stocks</a><a id="sellNav" class="navButton" style="color: white; margin: 10px; padding:5px;" href="/view/dashboard">Sell stocks</a></div>
         <div class="container">
             @content
         </div>
@@ -39,4 +39,15 @@
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/reactable/0.10.2/reactable.min.js'></script>
 
     <script type='text/jsx' src='@routes.Assets.versioned("javascripts/app.jsx")'></script>
+
+    <script type="text/javascript">
+            $( document ).ready(function( $ ) {
+                if (window.location.href.indexOf("/view/dashboard") > 0) {
+                    $("#sellNav").addClass("active");
+                } else {
+                    $("#buyNav").addClass("active");
+                }
+            });
+        </script>
+
 </html>

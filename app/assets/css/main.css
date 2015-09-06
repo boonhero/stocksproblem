@@ -9,3 +9,8 @@
 .green {
     color: #61BD6D;
 }
+
+a.active {
+    opacity: 0.55;
+    background-color: #000000;
+}
