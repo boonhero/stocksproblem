@@ -6,7 +6,7 @@ import com.google.inject.Inject
 import model._
 import module.data.mock.MockStockProvider
 import module.data.{StockDao, StockTransactionDao, UserDao}
-import module.service.StockTransactionService
+import module.service.{UserService, StockTransactionService}
 import play.api.Logger
 import play.api.data.Forms._
 import play.api.data._
@@ -15,7 +15,7 @@ import play.api.mvc._
 
 import scala.util.Random
 
-class StockController @Inject() (stockTransactionService: StockTransactionService, stockDao: StockDao, mockStockProvider: MockStockProvider, stockTransactionDao: StockTransactionDao, userDao: UserDao) extends Controller {
+class StockController @Inject() (userService: UserService, stockTransactionService: StockTransactionService, stockDao: StockDao, mockStockProvider: MockStockProvider, stockTransactionDao: StockTransactionDao, userDao: UserDao) extends Controller {
   val logger: Logger = Logger(this.getClass())
 
   implicit val currencyFormat = Json.format[Currency]
@@ -67,27 +67,17 @@ class StockController @Inject() (stockTransactionService: StockTransactionServic
     logger.info("request: " + request.body)
     val (userId, stockId, quantity) = (request.body.asFormUrlEncoded.get("userId")(0), request.body.asFormUrlEncoded.get("stockId")(0), request.body.asFormUrlEncoded.get("quantity")(0).toInt)
 
-    stockDao.findBy(stockId) match {
-      case Some(stock) => {
-        val userStockId: String = UUID.randomUUID().toString
-        val newStock: Stock = stock.copy(userStockId = userStockId, quantity = quantity)
-        val user: User = userDao.find(userId).get
-        user.addStock(newStock)
-        stockTransactionService.transact(newStock, "BUY", userId)
-      }
+    userService.buy(stockId, userId, quantity) match {
+      case Some(userTransactionId) => Redirect(routes.StockController.myDashboardIndex)
       case None => BadRequest("not a valid request")
     }
+
     Redirect(routes.StockController.myDashboardIndex)
+
   }
 
   def sell(userStockId:String, rate:Double) = Action {implicit request =>
-      val user: User = userDao.find("testId").get
-    val stock = user.getStockByUserStockId(userStockId).get
-    val currency: Currency = Currency(stock.name, rate)
-    val newStock =  stock.copy(currency = currency);
-    user.removeStock(userStockId)
-    stockTransactionService.transact(newStock, "SELL", user.name)
-
+    userService.sell(userStockId, "testId", rate)
     Redirect(routes.StockController.myDashboardIndex)
   }
 
