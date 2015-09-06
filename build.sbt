@@ -3,7 +3,7 @@ name := """stocks problem"""
 version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala, SbtWeb)
-
+scalacOptions ++= Seq("-encoding", "UTF-8")
 scalaVersion := "2.11.7"
 
 libraryDependencies ++= Seq(

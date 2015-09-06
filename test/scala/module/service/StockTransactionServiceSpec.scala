@@ -11,7 +11,7 @@ class StockTransactionServiceSpec extends Specification with Mockito {
       val mockStockDao = new MockStockDao
       val mockDataService = new MockStockProvider(mockStockDao)
       mockDataService.readStocks()
-      mockStockDao.stocks must haveSize(91)
+      mockStockDao.stocks must haveSize(93)
     }
   }
 
