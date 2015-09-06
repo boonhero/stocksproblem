@@ -24,4 +24,8 @@ class MockStockTransactionDao extends StockTransactionDao {
   override def removeAll(): Unit = {
     this.stockTransactions = List()
   }
+
+  override def findBy(userStockId: String): List[StockTransaction] = {
+    stockTransactions.filter(f => f.stock.userStockId.equals(userStockId))
+  }
 }

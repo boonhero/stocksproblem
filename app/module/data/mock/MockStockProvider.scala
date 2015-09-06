@@ -49,7 +49,7 @@ class MockStockProvider @Inject() (stockDao: StockDao) {
     val lines: String = sb.toString()
 
     val perLine: Array[String] = lines.split("\n")
-    var startDate: DateTime = DateHelper.formatter.parseDateTime("01/7/2015")
+    var startDate: DateTime = DateHelper.formatter.parseDateTime("30/6/2015")
     val newStocks = perLine.foldLeft(List[Stock]()) {(stocks, l) => {
 
       val fields = l.split("\\t")
@@ -61,9 +61,9 @@ class MockStockProvider @Inject() (stockDao: StockDao) {
 
       startDate = startDate plusDays (1)
       val addedStocks = stocks ::: List[Stock](
-      Stock("", UUID.randomUUID().toString, "ABC", startDate, -1, BigDecimal(ABCprice), Currency("USD", 1.0)),
-      Stock("", UUID.randomUUID().toString, "DEF", startDate, -1, BigDecimal(DEFprice), Currency("GBP", GBP.toDouble)),
-      Stock("", UUID.randomUUID().toString, "XYZ", startDate, -1, BigDecimal(XYZprice), Currency("EUR", EUR.toDouble)))
+      Stock("", UUID.randomUUID().toString, "ABC", startDate, -1, BigDecimal(ABCprice), Currency("USD", 1.0), BigDecimal(0)),
+      Stock("", UUID.randomUUID().toString, "DEF", startDate, -1, BigDecimal(DEFprice), Currency("GBP", GBP.toDouble), BigDecimal(0)),
+      Stock("", UUID.randomUUID().toString, "XYZ", startDate, -1, BigDecimal(XYZprice), Currency("EUR", EUR.toDouble), BigDecimal(0)))
 
       addedStocks
     }}

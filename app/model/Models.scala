@@ -3,8 +3,12 @@ package model
 import com.github.nscala_time.time.Imports._
 
 case class Currency (name: String, rate: Double)
-case class Stock(userStockId: String, _id: String, name: String, tradeDate: DateTime, quantity: Int, price: BigDecimal, currency: Currency)
+case class Stock(userStockId: String, _id: String, name: String, tradeDate: DateTime, quantity: Int, price: BigDecimal, currency: Currency, profitLoss: BigDecimal)
 case class User(name: String, var stocks: List[Stock]) {
+  def removeAllStocks(): Unit = {
+    stocks = List()
+  }
+
 
   def getStockByUserStockId(id: String) : Option[Stock] = {
     stocks.filter(p => p.userStockId.equals(id)) match {

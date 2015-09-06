@@ -12,10 +12,6 @@ class UserService @Inject() (userDao: UserDao, stockTransactionService: StockTra
 
     /**
      * Sell stock, remove the stock from user, get a new stock on the market to update price and sell it.
-     *
-     * @param stock
-     * @param userId
-     * @return
      */
     def sell(userStockId: String, userId: String, rate: Double): Option[String] = {
         val user: User = userDao.find(userId).get
@@ -25,6 +21,35 @@ class UserService @Inject() (userDao: UserDao, stockTransactionService: StockTra
                 val newStock =  stock.copy(currency = currency)
                 user.removeStock(userStockId)
                 Some(stockTransactionService.transact(newStock, "SELL", user.name))
+            }
+            case None => None
+        }
+    }
+
+
+    def sell(userStockId: String, userId: String, tradeDate: DateTime, quantity: Int): Option[String] = {
+        val user: User = userDao.find(userId).get
+        user.getStockByUserStockId(userStockId) match {
+            case Some(userStock) => {
+                if (userStock.quantity > 0) {
+                    stockDao.findBy(userStock.name, tradeDate) match {
+                        case Some(tradeStock) => {
+                            var quantityUsed = quantity
+                            if ((userStock.quantity - quantity) <= 0) {
+                                quantityUsed = userStock.quantity
+                            }
+                            user.removeStock(userStockId)
+                            val lossFor: BigDecimal = (tradeStock.price * quantityUsed) - (userStock.price * quantityUsed)
+                            user.addStock(userStock.copy(quantity = (userStock.quantity - quantityUsed), profitLoss = lossFor))
+                            val newStock =  tradeStock.copy(userStockId = userStockId, quantity = quantityUsed)
+                            Some(stockTransactionService.transact(newStock, "SELL", user.name))
+                        }
+                        case None => None
+                    }
+                } else {
+                    None
+                }
+
             }
             case None => None
         }

@@ -2,24 +2,29 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET         /                                 controllers.StockController.index
-GET         /view/stock                       controllers.StockController.index
-GET         /stock                            controllers.StockController.list
-GET         /stock/:id                        controllers.StockController.findOne(id: String)
-POST        /stock/buy                        controllers.StockController.buyTransaction
+GET         /                                                         controllers.StockController.myDashboardIndex
+GET         /view/stock                                               controllers.StockController.index
+GET         /stock                                                    controllers.StockController.list
+GET         /stock/:id                                                controllers.StockController.findOne(id: String)
+POST        /stock/buy                                                controllers.StockController.buyTransaction
 
-GET         /view/stock/buy/:stockId          controllers.StockController.buystockIndex(stockId: String)
+GET         /view/stock/buy/:stockId                                  controllers.StockController.buystockIndex(stockId: String)
 
-GET         /view/dashboard                   controllers.StockController.myDashboardIndex
-GET         /stock/user/:userId               controllers.StockController.showStocksFrom(userId: String)
+GET         /view/dashboard                                           controllers.StockController.myDashboardIndex
+GET         /stock/user/:userId                                       controllers.StockController.showStocksFrom(userId: String)
 
-GET         /currency                         controllers.StockController.showCurrencyRates
-GET         /transaction/status                      controllers.StockController.showStockStatus
-GET         /transaction                    controllers.StockController.listStockTransactions
+GET         /stockdate/:date                                          controllers.StockController.findStocksByDate(date: String)
 
-GET         /sell/stock/:id/sell/:rate        controllers.StockController.sell(id:String, rate:Double)
-GET         /reset                            controllers.StockController.resetTransactions
+GET         /currency                                                 controllers.StockController.showCurrencyRates
+GET         /transaction/status                                       controllers.StockController.showStockStatus
+GET         /transaction                                              controllers.StockController.listStockTransactions
+
+GET         /profitloss/:userStockId                                  controllers.StockController.profitLoss(userStockId: String)
+
+GET         /sell/stock/:id/sell/:tradeDate/quantity/:quantity        controllers.StockController.sell(id:String, tradeDate: String, quantity: Int)
+GET         /reset                                                    controllers.StockController.resetTransactions
+GET         /reset/all                                                controllers.StockController.resetAll
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                                             controllers.Assets.versioned(path="/public", file: Asset)
 
-GET         /webjars/*file                    controllers.WebJarAssets.at(file)
+GET         /webjars/*file                                            controllers.WebJarAssets.at(file)

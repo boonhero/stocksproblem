@@ -7,4 +7,5 @@ import org.joda.time.format.{DateTimeFormatter, DateTimeFormat}
  */
 object DateHelper {
    val formatter: DateTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
+   val dashFormatter: DateTimeFormatter = DateTimeFormat.forPattern("dd-MM-yyyy")
 }

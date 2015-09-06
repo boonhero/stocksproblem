@@ -6,6 +6,8 @@ import module.data.mock.MockStockTransactionDao
 
 @ImplementedBy(classOf[MockStockTransactionDao])
 trait StockTransactionDao {
+  def findBy(userStockId: String): List[StockTransaction]
+
   def removeAll(): Unit
 
   def findAll(): Option[List[StockTransaction]] 
@@ -19,4 +21,6 @@ class StockTransactionDaoImpl extends StockTransactionDao {
   override def findAll(): Option[List[StockTransaction]] = ???
 
   override def removeAll(): Unit = ???
+
+  override def findBy(userStockId: String): List[StockTransaction] = ???
 }

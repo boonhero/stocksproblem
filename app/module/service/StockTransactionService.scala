@@ -36,8 +36,8 @@ class StockTransactionService @Inject() (stockTransactionDao: StockTransactionDa
    */
   def convert(transactionType: String, value: BigDecimal) = {
     transactionType match {
-      case "BUY" => value
-      case "SELL" => -1 * value
+      case "BUY" => -1 * value
+      case "SELL" => value
     }
   }
 
@@ -53,5 +53,9 @@ class StockTransactionService @Inject() (stockTransactionDao: StockTransactionDa
       }
       case None => List()
     }
+  }
+
+  def getProfitOrLossFor(userStockId: String): BigDecimal = {
+      stockTransactionDao.findBy(userStockId).map(p => convert(p.transactionType, (p.usdPrice * p.stock.quantity * p.stock.currency.rate))).sum
   }
 }
