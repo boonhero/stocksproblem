@@ -221,6 +221,7 @@ var TodayStocks = React.createClass({
                     <Reactable.Td column="Trade Date" data={stockTradeDate} />
                     <Reactable.Td column="Name" data={stock.name}/>
                     <Reactable.Td column="Currency" data={stock.currency.name}/>
+                    <Reactable.Td column="Rate" data={stock.currency.rate}/>
                     <Reactable.Td column="Price" data={stock.price}/>
                     <Reactable.Td column=""><a href={'/view/stock/buy/' + stock._id}>BUY</a></Reactable.Td>
                 </Reactable.Tr>
