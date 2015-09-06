@@ -65,7 +65,7 @@ var ComputeResult = React.createClass({
     render: function() {
         var nodes = this.props.data.map(function (computeResult) {
             var redgreenHighlight = "";
-            if (("" + computeResult.totalBalance).contains("-")) {
+            if (("" + computeResult.totalBalance).contains("-") || computeResult.totalBalance == 0) {
                 redgreenHighlight = "red";
             } else {
                 redgreenHighlight = "green";
@@ -150,7 +150,7 @@ var Stocks = React.createClass({
                     <Reactable.Td column="Quantity" data={stock.quantity}/>
                     <Reactable.Td column="Currency" data={stock.currency.name}/>
                     <Reactable.Td column="Price" data={stock.price}/>
-                    <Reactable.Td column=""><a href={'/view/stock/'+stock._id+'/sell/' + rate }>SELL</a></Reactable.Td>
+                    <Reactable.Td column=""><a href={'/sell/stock/' + stock.userStockId + '/sell/' + rate }>SELL</a></Reactable.Td>
                 </Reactable.Tr>
             );
         });

@@ -17,7 +17,7 @@ GET         /currency                         controllers.StockController.showCu
 GET         /transaction/status                      controllers.StockController.showStockStatus
 GET         /transaction                    controllers.StockController.listStockTransactions
 
-GET         /view/stock/:id/sell/:rate        controllers.StockController.sell(id:String, rate:Double)
+GET         /sell/stock/:id/sell/:rate        controllers.StockController.sell(id:String, rate:Double)
 GET         /reset                            controllers.StockController.resetTransactions
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)

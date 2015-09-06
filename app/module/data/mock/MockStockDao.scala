@@ -12,7 +12,7 @@ import utility.DateHelper
 @Singleton
 class MockStockDao extends StockDao {
   var stocks = List[Stock] (
-    Stock("AB01", "ABC", DateHelper.formatter.parseDateTime("03/11/2015"), -1, 10, Currency("USD", 1.0))
+    Stock("", "AB01", "ABC", DateHelper.formatter.parseDateTime("03/11/2015"), -1, 10, Currency("USD", 1.0))
   )
 
   override def findAll(): List[Stock] = {

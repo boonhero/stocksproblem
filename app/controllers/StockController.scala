@@ -1,5 +1,7 @@
 package controllers
 
+import java.util.UUID
+
 import com.google.inject.Inject
 import model._
 import module.data.mock.MockStockProvider
@@ -67,28 +69,24 @@ class StockController @Inject() (stockTransactionService: StockTransactionServic
 
     stockDao.findBy(stockId) match {
       case Some(stock) => {
-        val newStock: Stock = stock.copy(quantity = quantity)
+        val userStockId: String = UUID.randomUUID().toString
+        val newStock: Stock = stock.copy(userStockId = userStockId, quantity = quantity)
         val user: User = userDao.find(userId).get
         user.addStock(newStock)
         stockTransactionService.transact(newStock, "BUY", userId)
-
       }
       case None => BadRequest("not a valid request")
     }
     Redirect(routes.StockController.myDashboardIndex)
   }
 
-  def sell(id:String, rate:Double) = Action {implicit request =>
-    stockDao.findBy(id) match {
-      case Some(stock) => {
-        val currency: Currency = Currency(stock.name, rate)
-        val user: User = userDao.find("testId").get
-        val newStock = user.getStock(id).get.copy(currency = currency)
-        user.removeStock(id)
-        stockTransactionService.transact(newStock, "SELL", user.name)
-      }
-      case None => BadRequest("not a valid request")
-    }
+  def sell(userStockId:String, rate:Double) = Action {implicit request =>
+      val user: User = userDao.find("testId").get
+    val stock = user.getStockByUserStockId(userStockId).get
+    val currency: Currency = Currency(stock.name, rate)
+    val newStock =  stock.copy(currency = currency);
+    user.removeStock(userStockId)
+    stockTransactionService.transact(newStock, "SELL", user.name)
 
     Redirect(routes.StockController.myDashboardIndex)
   }

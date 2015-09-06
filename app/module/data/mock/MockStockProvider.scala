@@ -1,16 +1,12 @@
 package module.data.mock
 
-import java.io.File
 import java.util.UUID
 
 import com.google.inject.{Inject, Singleton}
 import model.{Currency, Stock}
 import module.data.StockDao
 import org.joda.time.DateTime
-import play.api.Play
 import utility.DateHelper
-
-import scala.io.BufferedSource
 
 @Singleton
 class MockStockProvider @Inject() (stockDao: StockDao) {
@@ -65,9 +61,9 @@ class MockStockProvider @Inject() (stockDao: StockDao) {
 
       startDate = startDate plusDays (1)
       val addedStocks = stocks ::: List[Stock](
-      Stock(UUID.randomUUID().toString, "ABC", startDate, -1, BigDecimal(ABCprice), Currency("USD", 1.0)),
-      Stock(UUID.randomUUID().toString, "DEF", startDate, -1, BigDecimal(DEFprice), Currency("GBP", GBP.toDouble)),
-      Stock(UUID.randomUUID().toString, "XYZ", startDate, -1, BigDecimal(XYZprice), Currency("EUR", EUR.toDouble)))
+      Stock("", UUID.randomUUID().toString, "ABC", startDate, -1, BigDecimal(ABCprice), Currency("USD", 1.0)),
+      Stock("", UUID.randomUUID().toString, "DEF", startDate, -1, BigDecimal(DEFprice), Currency("GBP", GBP.toDouble)),
+      Stock("", UUID.randomUUID().toString, "XYZ", startDate, -1, BigDecimal(XYZprice), Currency("EUR", EUR.toDouble)))
 
       addedStocks
     }}
