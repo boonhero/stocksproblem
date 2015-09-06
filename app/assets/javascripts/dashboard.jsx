@@ -65,7 +65,7 @@ var ComputeResult = React.createClass({
     render: function() {
         var nodes = this.props.data.map(function (computeResult) {
             var redgreenHighlight = "";
-            if (("" + computeResult.totalBalance).contains("-") || computeResult.totalBalance == 0) {
+            if (computeResult.totalBalance <= 0) {
                 redgreenHighlight = "red";
             } else {
                 redgreenHighlight = "green";
