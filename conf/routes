@@ -19,8 +19,6 @@ GET         /currency                                                 controller
 GET         /transaction/status                                       controllers.StockController.showStockStatus
 GET         /transaction                                              controllers.StockController.listStockTransactions
 
-GET         /profitloss/:userStockId                                  controllers.StockController.profitLoss(userStockId: String)
-
 GET         /sell/stock/:id/sell/:tradeDate/quantity/:quantity        controllers.StockController.sell(id:String, tradeDate: String, quantity: Int)
 GET         /reset                                                    controllers.StockController.resetTransactions
 GET         /reset/all                                                controllers.StockController.resetAll

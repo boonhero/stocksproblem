@@ -21,10 +21,12 @@ var UserStockList = React.createClass({
     },
     render: function() {
         return (
+            <pre>
             <div className="">
                 <h3>Sell Stocks</h3>
                 <Stocks data={this.state.data} />
             </div>
+                </pre>
         );
     }
 });
@@ -52,10 +54,12 @@ var StockStatus = React.createClass({
     },
     render: function() {
         return (
+            <pre>
             <div className="stock-status">
                 <h3>Stocks Overview</h3>
                 <ComputeResult data={this.state.data} />
             </div>
+                </pre>
         );
     }
 });
@@ -68,7 +72,7 @@ var ComputeResult = React.createClass({
                 redgreenHighlight = "red";
             } else {
                 redgreenHighlight = "green";
-        }
+            }
             return (
                 <Reactable.Tr>
                     <Reactable.Td column="Name" data={computeResult.name} />
@@ -77,7 +81,6 @@ var ComputeResult = React.createClass({
             );
 
         });
-
             return (
                 <Reactable.Table className="table">
                     {nodes}
@@ -129,14 +132,23 @@ var DateStockList = React.createClass({
     render: function() {
         var submit = this.loadStocksByState
         return (
+            <pre>
             <div className="">
                 <h3>Stocks today! {this.state.date}</h3>
                 <TodayStocks data={this.state.data} />
-                <form>
-                    <input type="text" id="datetimepicker1" placeholder="Choose date" required="true" value={this.state.date} />
-                    <br/><input id="loadStockButton" type="button" value="Load" /><span> Used also in selling stocks.</span>
-                </form>
+                <div className="row">
+                    <form>
+                        <div className="col-xs-6">
+                            <h5>Simulate Date</h5>
+                            <h7>For buying/selling stocks</h7><br/>
+                             <input type="text" id="datetimepicker1" placeholder="Choose date"
+                                                required="true" value={this.state.date}/>
+                                <input id="loadStockButton" type="button" value="Choose" />
+                        </div>
+                    </form>
+                </div>
             </div>
+                 </pre>
         );
     }
 });
@@ -223,12 +235,14 @@ var TodayStocks = React.createClass({
                     <Reactable.Td column="Currency" data={stock.currency.name}/>
                     <Reactable.Td column="Rate" data={stock.currency.rate}/>
                     <Reactable.Td column="Price" data={stock.price}/>
-                    <Reactable.Td column=""><a href={'/view/stock/buy/' + stock._id}>BUY</a></Reactable.Td>
+                    <Reactable.Td column="">
+                        <a  className="btn btn-block btn-info"  href={'/view/stock/buy/' + stock._id}>BUY</a>
+                    </Reactable.Td>
                 </Reactable.Tr>
             );
         });
         return (
-            <Reactable.Table className="table"  sortable={true} filterable={['Name', 'Trade Date']}>
+            <Reactable.Table className="table" >
                 {stockNodes}
             </Reactable.Table>
         );
@@ -239,21 +253,34 @@ var Stocks = React.createClass({
     render: function() {
         var stockNodes = this.props.data.map(function (stock) {
             var stockTradeDate = $.datepicker.formatDate("dd-M-yy", new Date(stock.tradeDate));
+            var redgreenHighlight = "";
+            if (stock.profitLoss < 0) {
+                redgreenHighlight = "red";
+            } else {
+                redgreenHighlight = "green";
+            }
+
+            $("#buttonSell_" + stock.userStockId).click(function() {
+                window.location.href = '/sell/stock/' + stock.userStockId + '/sell/' +  $("#datetimepicker1").val() + '/quantity/' + (($("#" + stock.userStockId).val() == "") ? 0 : $("#" + stock.userStockId).val())
+            })
+
             return (
                 <Reactable.Tr>
                     <Reactable.Td column="Trade Date" data={stockTradeDate} />
                     <Reactable.Td column="Name" data={stock.name}/>
                     <Reactable.Td column="Quantity" data={stock.quantity}/>
                     <Reactable.Td column="Base Price" data={stock.currency.name + ' ' + stock.price}/>
-                    <Reactable.Td column="Profit/Loss ($)" data={stock.profitLoss}/>
+                    <Reactable.Td className={redgreenHighlight} column="Profit/Loss ($)" data={stock.profitLoss}/>
                     <Reactable.Td column="Sell Qty"><input type="number" id={stock.userStockId} /></Reactable.Td>
-                    <Reactable.Td column=""><a href={'/sell/stock/' + stock.userStockId + '/sell/' +  $("#datetimepicker1").val() + '/quantity/' + (($("#" + stock.userStockId).val() == "") ? 0 : $("#" + stock.userStockId).val()) }>SELL</a></Reactable.Td>
+                    <Reactable.Td column="">
+                        <input type="button"  className="btn btn-block btn-info" id={"buttonSell_" + stock.userStockId} value="Sell"></input>
+                    </Reactable.Td>
                 </Reactable.Tr>
             );
         });
         if (stockNodes.length == 0) {
             return (
-                <h4>Nothing to sell yet.</h4>
+                <h7>Nothing to sell yet.</h7>
             );
         } else {
             return (

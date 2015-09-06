@@ -125,10 +125,6 @@ class StockController @Inject() (userService: UserService, stockTransactionServi
     Ok(json)
   }
 
-  def profitLoss(userStockId: String) = Action { implicit request =>
-    Ok(stockTransactionService.getProfitOrLossFor(userStockId).toString())
-  }
-
   def showStockStatus = Action { implicit request =>
     val computeResults: List[ComputeResult] = stockTransactionService.getProfitOrLossForAllStocks()
     val json: JsValue = Json.toJson(computeResults)
