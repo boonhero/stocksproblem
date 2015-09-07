@@ -10,23 +10,6 @@ import org.joda.time.DateTime
 @Singleton
 class UserService @Inject() (userDao: UserDao, stockTransactionService: StockTransactionService, stockDao: StockDao) {
 
-    /**
-     * Sell stock, remove the stock from user, get a new stock on the market to update price and sell it.
-     */
-    def sell(userStockId: String, userId: String, rate: Double): Option[String] = {
-        val user: User = userDao.find(userId).get
-        user.getStockByUserStockId(userStockId) match {
-            case Some(stock) => {
-                val currency: Currency = Currency(stock.name, rate)
-                val newStock =  stock.copy(currency = currency)
-                user.removeStock(userStockId)
-                Some(stockTransactionService.transact(newStock, "SELL", user.name))
-            }
-            case None => None
-        }
-    }
-
-
     def sell(userStockId: String, userId: String, tradeDate: DateTime, quantity: Int): Option[String] = {
         val user: User = userDao.find(userId).get
         user.getStockByUserStockId(userStockId) match {

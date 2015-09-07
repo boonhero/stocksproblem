@@ -42,7 +42,7 @@ class StockTransactionService @Inject() (stockTransactionDao: StockTransactionDa
   }
 
   /**
-   * Computes profit or loss for each Stock name
+   * Sum of all profit or loss for each stocks
    * @return
    */
   def getProfitOrLossForAllStocks(): List[ComputeResult] = {

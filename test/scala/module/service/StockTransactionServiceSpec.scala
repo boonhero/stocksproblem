@@ -1,6 +1,10 @@
 package scala.module.service
 
+import model.{StockTransaction, Stock, Currency, ComputeResult}
+import module.data.StockTransactionDao
 import module.data.mock.{MockStockProvider, MockStockDao}
+import module.service.StockTransactionService
+import org.joda.time.DateTime
 import org.specs2.mock.Mockito
 import org.specs2.mutable.Specification
 
@@ -15,33 +19,21 @@ class StockTransactionServiceSpec extends Specification with Mockito {
     }
   }
 
-//  "StockTransactionService" should {
-//    "get no profit and no loss" in {
-//      module.stockTransactionDao.stockTransactions = List[StockTransaction](
-//        StockTransaction("T-ABC1", Stock("ABC1", "ABC", new DateTime(), 10, BigDecimal("100"), Currency("USD", 1.0)), "BUY", new DateTime(), "testId"),
-//        StockTransaction("T-ABC1", Stock("ABC1", "ABC", new DateTime(), 10, BigDecimal("100"), Currency("USD", 1.0)), "BUY", new DateTime(), "testId"),
-//        StockTransaction("T-ABC1", Stock("ABC1", "ABC", new DateTime(), 10, BigDecimal("100"), Currency("USD", 1.0)), "SELL", new DateTime(), "testId"),
-//        StockTransaction("T-ABC1", Stock("ABC1", "ABC", new DateTime(), 10, BigDecimal("100"), Currency("USD", 1.0)), "SELL", new DateTime(), "testId")
-//      )
-//      val result = module.stockTransactionService.getProfitOrLossForAllStocks()
-//
-//      println(result.get)
-//    }
-//  }
-//
-//
-//
-//
-//  it should "get multiple profit" in {
-//    module.stockTransactionDao.stockTransactions = List[StockTransaction](
-//      StockTransaction("T-ABC1", Stock("ABC1", "ABC", new DateTime(), 10, BigDecimal("100"), Currency("USD", 1.0)), "BUY", new DateTime(), "testId"),
-//      StockTransaction("T-ABC1", Stock("ABC1", "ABC", new DateTime(), 10, BigDecimal("100"), Currency("USD", 1.0)), "BUY", new DateTime(), "testId"),
-//      StockTransaction("T-XYZ1", Stock("XYZ1", "XYZ", new DateTime(), 10, BigDecimal("100"), Currency("USD", 1.0)), "BUY", new DateTime(), "testId"),
-//      StockTransaction("T-XYZ1", Stock("XYZ1", "XYZ", new DateTime(), 10, BigDecimal("100"), Currency("USD", 1.0)), "BUY", new DateTime(), "testId")
-//    )
-//    val result = module.stockTransactionService.getProfitOrLossForAllStocks()
-//
-//    println(result.get)
-//  }
+  "StockTransactionService get profit or loss" should {
+    "get profit or loss by accumulated profit and losses" in {
+      val stockTransactionDao = mock[StockTransactionDao]
+      val stockTransactionService: StockTransactionService = new StockTransactionService(stockTransactionDao)
 
+      stockTransactionDao.findAll() returns Some(List[StockTransaction](
+        StockTransaction(_id = "T-XYZ1", Stock(userStockId = "XYZ-1",_id = "XYZ-a", name = "XYZ", tradeDate = new DateTime(), quantity = 10, price = BigDecimal("100"), Currency("USD", 1.0), BigDecimal(10)),usdPrice = 1000, "SELL", new DateTime(), "testId"),
+        StockTransaction(_id = "T-XYZ1", Stock(userStockId = "XYZ-1",_id = "XYZ-a", name = "XYZ", tradeDate = new DateTime(), quantity = 10, price = BigDecimal("100"), Currency("USD", 1.0), BigDecimal(10)),usdPrice = 1000, "SELL", new DateTime(), "testId")
+      ))
+
+
+      val result: List[ComputeResult] = stockTransactionService.getProfitOrLossForAllStocks()
+      result.size === 1
+      result(0).name === "XYZ"
+      result(0).totalBalance === 20
+    }
+  }
 }
