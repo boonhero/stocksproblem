@@ -68,7 +68,7 @@ var ComputeResult = React.createClass({
     render: function() {
         var nodes = this.props.data.map(function (computeResult) {
             var redgreenHighlight = "";
-            if (computeResult.totalBalance <= 0) {
+            if (computeResult.totalBalance < 0) {
                 redgreenHighlight = "red";
             } else {
                 redgreenHighlight = "green";
@@ -76,7 +76,7 @@ var ComputeResult = React.createClass({
             return (
                 <Reactable.Tr>
                     <Reactable.Td column="Name" data={computeResult.name} />
-                    <Reactable.Td className={redgreenHighlight}  column="Status" data={'$' + computeResult.totalBalance}></Reactable.Td>
+                    <Reactable.Td className={redgreenHighlight}  column="Total profit/loss ($)" data={'$' + computeResult.totalBalance}></Reactable.Td>
                 </Reactable.Tr>
             );
 
@@ -232,9 +232,8 @@ var TodayStocks = React.createClass({
                 <Reactable.Tr>
                     <Reactable.Td column="Trade Date" data={stockTradeDate} />
                     <Reactable.Td column="Name" data={stock.name}/>
-                    <Reactable.Td column="Currency" data={stock.currency.name}/>
+                    <Reactable.Td column="Price" data={stock.currency.name + ' ' + stock.price}/>
                     <Reactable.Td column="Rate" data={stock.currency.rate}/>
-                    <Reactable.Td column="Price" data={stock.price}/>
                     <Reactable.Td column="">
                         <a  className="btn btn-block btn-info"  href={'/view/stock/buy/' + stock._id}>BUY</a>
                     </Reactable.Td>
@@ -270,6 +269,7 @@ var Stocks = React.createClass({
                     <Reactable.Td column="Name" data={stock.name}/>
                     <Reactable.Td column="Quantity" data={stock.quantity}/>
                     <Reactable.Td column="Base Price" data={stock.currency.name + ' ' + stock.price}/>
+                    <Reactable.Td column="Base Rate" data={stock.currency.rate}/>
                     <Reactable.Td className={redgreenHighlight} column="Profit/Loss ($)" data={stock.profitLoss}/>
                     <Reactable.Td column="Sell Qty"><input type="number" id={stock.userStockId} /></Reactable.Td>
                     <Reactable.Td column="">
