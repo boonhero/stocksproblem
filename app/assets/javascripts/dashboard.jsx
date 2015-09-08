@@ -106,14 +106,19 @@ var DateStockList = React.createClass({
         });
     },
     getInitialState: function() {
-        return {date: "01-07-2015", data: []};
+        var dateChosen = Cookies.get('dateChosen');
+        if (dateChosen == undefined) {
+            dateChosen = "01-07-2015";
+            Cookies.set('dateChosen', "01-07-2015");
+        }
+        return {date: dateChosen, data: []};
     },
     componentDidMount: function() {
         var self = this;
         $(function () {
-            $("#datetimepicker1").datepicker({defaultDate: $.datepicker.parseDate('yymmdd', '20150701'), dateFormat: 'dd-mm-yy'});
-            $("#loadStockButton").click(function() {
+            var loadDates = function() {
                 var date = $("#datetimepicker1").val();
+                Cookies.set('dateChosen', date);
                 $.ajax({
                     url: "/stockdate/" + date,
                     dataType: 'json',
@@ -125,7 +130,14 @@ var DateStockList = React.createClass({
                         console.error(self.props.url, status, err.toString());
                     }.bind(self)
                 });
-            });
+            }
+            $("#datetimepicker1").datepicker({defaultDate: $.datepicker.parseDate('yymmdd', '20150701'), dateFormat: 'dd-mm-yy',  onSelect: function (selectedDate, ele)
+                {
+                    console.log(selectedDate);
+                    loadDates();
+                }}
+
+            );
         });
         this.loadStocks(this.state.date);
     },
@@ -140,10 +152,9 @@ var DateStockList = React.createClass({
                     <form>
                         <div className="col-xs-6">
                             <h5>Simulate Date</h5>
-                            <h7>For buying/selling stocks</h7><br/>
+                            <h7>Choose date for buying/selling stocks</h7><br/>
                              <input type="text" id="datetimepicker1" placeholder="Choose date"
                                                 required="true" value={this.state.date}/>
-                                <input id="loadStockButton" type="button" value="Choose" />
                         </div>
                     </form>
                 </div>
@@ -153,75 +164,6 @@ var DateStockList = React.createClass({
     }
 });
 
-//var Currencies = React.createClass({
-//    loadCurrencies: function() {
-//        $.ajax({
-//            url: "/currency",
-//            dataType: 'json',
-//            cache: false,
-//            success: function(data) {
-//                this.setState({data: data});
-//            }.bind(this),
-//            error: function(xhr, status, err) {
-//                console.error(this.props.url, status, err.toString());
-//            }.bind(this)
-//        });
-//    },
-//    loadCurrenciesByDate: function(e) {
-//        e.preventDefault();
-//        $.ajax({
-//            url: "/currency/" + $("#datetimepicker1").value,
-//            dataType: 'json',
-//            cache: false,
-//            success: function(data) {
-//                this.setState({data: data});
-//            }.bind(this),
-//            error: function(xhr, status, err) {
-//                console.error(this.props.url, status, err.toString());
-//            }.bind(this)
-//        });
-//    },
-//    getInitialState: function() {
-//        return {data: []};
-//    },
-//    componentDidMount: function() {
-//        $(function() {
-//            $("#datetimepicker1").datepicker({ defaultDate: $.datepicker.parseDate('yymmdd', '20150701') });
-//        });
-//        this.loadCurrencies();
-//        //setInterval(this.loadStocks, this.props.pollInterval);
-//    },
-//    render: function() {
-//        return (
-//            <div className="">
-//                <h3>Currency Rate</h3>
-//                <Currency data={this.state.data} />
-//                <form>
-//                    <input type="date" id="datetimepicker1" placeholder="Choose date" required="true" />
-//                    <input type="button" value="Select date" onClick={this.loadCurrenciesByDate}/>
-//                </form>
-//            </div>
-//        );
-//    }
-//});
-//
-//var Currency = React.createClass({
-//    render: function() {
-//        var currencyNodes = this.props.data.map(function (currency) {
-//            return (
-//                <Reactable.Tr>
-//                    <Reactable.Td column="Name" data={currency.name} />
-//                    <Reactable.Td  column="Rate" className={currency.name} data={currency.rate}/>
-//                </Reactable.Tr>
-//            );
-//        });
-//        return (
-//            <Reactable.Table className="table">
-//                {currencyNodes}
-//            </Reactable.Table>
-//        );
-//    }
-//});
 
 var TodayStocks = React.createClass({
     render: function() {
