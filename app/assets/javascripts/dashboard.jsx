@@ -76,7 +76,7 @@ var ComputeResult = React.createClass({
             return (
                 <Reactable.Tr>
                     <Reactable.Td column="Name" data={computeResult.name} />
-                    <Reactable.Td className={redgreenHighlight}  column="Total profit/loss ($)" data={'$' + computeResult.totalBalance}></Reactable.Td>
+                    <Reactable.Td className={redgreenHighlight}  column="Total profit/loss ($)" data={computeResult.totalBalance}></Reactable.Td>
                 </Reactable.Tr>
             );
 
