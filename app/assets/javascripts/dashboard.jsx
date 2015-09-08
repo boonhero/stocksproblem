@@ -52,9 +52,7 @@ var StockStatus = React.createClass({
                     redgreenHighlight = "green";
                 }
 
-                if (total > 0) {
-                    $("#cumulative").html("<h7>Cumulative profit/loss ($) : <span class='"+redgreenHighlight+"'>" + total + "</span></h7>");
-                }
+                $("#cumulative").html("<h7>Cumulative profit/loss ($) : <span class='"+redgreenHighlight+"'>" + total + "</span></h7>");
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
