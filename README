@@ -2,3 +2,22 @@ This is your new Play application
 =================================
 
 This file will be packaged with your application, when using `activator dist`.
+
+# Stock simulation
+An app to simulate profit and loss for stocks
+
+### Technology used
+
+1. Scala 2.11
+2. Play 2.4
+3. Reactjs
+
+#### Key features
+
+1. Buy stocks
+2. Sell stocks
+3. Get profit/loss for every transaction
+
+#### Limitations
+
+1. Only one user named "testId" is currently available for use.
