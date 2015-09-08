@@ -39,6 +39,22 @@ var StockStatus = React.createClass({
             cache: false,
             success: function(data) {
                 this.setState({data: data});
+
+                var total = 0;
+                data.forEach(function(d) {
+                    total += d.totalBalance;
+                });
+
+                var redgreenHighlight = "";
+                if (total < 0) {
+                    redgreenHighlight = "red";
+                } else {
+                    redgreenHighlight = "green";
+                }
+
+                if (total > 0) {
+                    $("#cumulative").html("<h7>Cumulative profit/loss ($) : <span class='"+redgreenHighlight+"'>" + total + "</span></h7>");
+                }
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -58,6 +74,8 @@ var StockStatus = React.createClass({
             <div className="stock-status">
                 <h3>Stocks Overview</h3>
                 <ComputeResult data={this.state.data} />
+
+                <div id="cumulative"></div>
             </div>
                 </pre>
         );
