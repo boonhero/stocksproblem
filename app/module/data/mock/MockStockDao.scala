@@ -12,7 +12,7 @@ import utility.DateHelper
 @Singleton
 class MockStockDao extends StockDao {
   var stocks = List[Stock] (
-    Stock("", "AB01", "ABC", DateHelper.formatter.parseDateTime("03/11/2015"), -1, 10, Currency("USD", 1.0), BigDecimal(0))
+    Stock("", Some("AB01"), "ABC", DateHelper.formatter.parseDateTime("03/11/2015").toDate, -1, 10, Currency("USD", 1.0), BigDecimal(0))
   )
 
   override def findAll(): List[Stock] = {
@@ -20,15 +20,15 @@ class MockStockDao extends StockDao {
   }
 
   override def findBy(name: String, tradeDate: DateTime): Option[Stock] = {
-    stocks.filter(p => p.name.equals(name)).filter(p => p.tradeDate.withTimeAtStartOfDay().isEqual(tradeDate.withTimeAtStartOfDay())) match {
+    stocks.filter(p => p.name.equals(name)).filter(p => new DateTime(p.tradeDate).withTimeAtStartOfDay().isEqual(new DateTime(tradeDate).withTimeAtStartOfDay())) match {
       case Nil => None
       case stock :: Nil => Some(stock)
       case stocks => Some(stocks(0))
     }
   }
 
-  override def findBy(tradeDate: DateTime): List[Stock] = {
-    stocks.filter(p => p.tradeDate.withTimeAtStartOfDay().isEqual(tradeDate.withTimeAtStartOfDay())) match {
+  override def findBy(tradeDate: java.util.Date): List[Stock] = {
+    stocks.filter(p => new DateTime(p.tradeDate).withTimeAtStartOfDay().isEqual(new DateTime(tradeDate).withTimeAtStartOfDay())) match {
       case Nil => List()
       case stocks => stocks
     }
@@ -39,12 +39,12 @@ class MockStockDao extends StockDao {
   }
 
   override def findBy(id: String): Option[Stock] = {
-    stocks.filter(p => p._id.equals(id)) match {
+    stocks.filter(p => p._id.get.equals(id)) match {
       case Nil => None
       case stock :: Nil => Some(stock)
       case stocks => Some(stocks(0))
     }
   }
 
-
+  override def save(stock: Stock): Unit = ???
 }

@@ -17,8 +17,8 @@ class MockStockTransactionDao extends StockTransactionDao {
     stockTransactions ::= transaction
   }
 
-  override def findAll(): Option[List[StockTransaction]] = {
-    Some(stockTransactions)
+  override def findAll(): List[StockTransaction] = {
+    stockTransactions
   }
 
   override def removeAll(): Unit = {

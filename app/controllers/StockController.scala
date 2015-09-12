@@ -7,6 +7,7 @@ import model._
 import module.data.mock.MockStockProvider
 import module.data.{StockDao, StockTransactionDao, UserDao}
 import module.service.{UserService, StockTransactionService}
+import org.bson.types.ObjectId
 import play.api.Logger
 import play.api.data.Forms._
 import play.api.data._
@@ -85,7 +86,7 @@ class StockController @Inject() (userService: UserService, stockTransactionServi
    */
   def findStocksByDate(date: String)  = Action {implicit request =>
     logger.info(date)
-    val stocks: List[Stock] = stockDao.findBy(DateHelper.dashFormatter.parseDateTime(date))
+    val stocks: List[Stock] = stockDao.findBy(DateHelper.dashFormatter.parseDateTime(date).toDate)
     val json: JsValue = Json.toJson(stocks)
     logger.info(s"json result:  [${json}]")
     Ok(json)
@@ -108,9 +109,7 @@ class StockController @Inject() (userService: UserService, stockTransactionServi
 
   def showStocksFrom(userId: String) = Action { implicit request =>
     logger.info(s"user stocks list: ${userId}")
-    val stocks: List[Stock] = userDao.find(userId) match {
-      case Some(user) => user.stocks
-    }
+    val stocks: List[Stock] = userDao.find(userId) match { case Some(user) => user.stocks }
     val json: JsValue = Json.toJson(stocks)
     logger.info(s"json result:  [${json}]")
     Ok(json)
@@ -146,7 +145,7 @@ class StockController @Inject() (userService: UserService, stockTransactionServi
   }
 
   def listStockTransactions = Action { implicit request =>
-    val json: JsValue = Json.toJson( stockTransactionDao.findAll().get)
+    val json: JsValue = Json.toJson( stockTransactionDao.findAll())
     logger.info(s"json result:  [${json}]")
     Ok(json)
   }

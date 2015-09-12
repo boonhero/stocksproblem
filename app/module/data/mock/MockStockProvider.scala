@@ -61,9 +61,9 @@ class MockStockProvider @Inject() (stockDao: StockDao) {
 
       startDate = startDate plusDays (1)
       val addedStocks = stocks ::: List[Stock](
-      Stock("", UUID.randomUUID().toString, "ABC", startDate, -1, BigDecimal(ABCprice), Currency("USD", 1.0), BigDecimal(0)),
-      Stock("", UUID.randomUUID().toString, "DEF", startDate, -1, BigDecimal(DEFprice), Currency("GBP", GBP.toDouble), BigDecimal(0)),
-      Stock("", UUID.randomUUID().toString, "XYZ", startDate, -1, BigDecimal(XYZprice), Currency("EUR", EUR.toDouble), BigDecimal(0)))
+      Stock("", Some(UUID.randomUUID().toString), "ABC", startDate.toDate, -1, BigDecimal(ABCprice), Currency("USD", 1.0), BigDecimal(0)),
+      Stock("", Some(UUID.randomUUID().toString), "DEF", startDate.toDate, -1, BigDecimal(DEFprice), Currency("GBP", GBP.toDouble), BigDecimal(0)),
+      Stock("", Some(UUID.randomUUID().toString), "XYZ", startDate.toDate, -1, BigDecimal(XYZprice), Currency("EUR", EUR.toDouble), BigDecimal(0)))
 
       addedStocks
     }}
